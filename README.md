@@ -10,25 +10,27 @@
 ## Usage
   Examples: 
 
-    let () = 
-      Future.(
-        10 
-        |> resolve 
-        |> map (fun x -> x + 1)
-        |> chain (fun x -> resolve (x + 1))
-        |> fork Js.log Js.log
-      )
+```OCaml
+let () = 
+  Future.(
+    10 
+    |> resolve 
+    |> map (fun x -> x + 1)
+    |> chain (fun x -> resolve (x + 1))
+    |> fork Js.log Js.log
+  )
+```
 
-  Callback to Future
+Node style callback to Future
 
-    module F = Future
+```OCaml
+module F = Future
 
-    external readFile: string -> string -> F.nodeback -> unit = "readFile"[@@bs.module "fs"]
+external readFile: string -> string -> F.nodeback -> unit = "readFile"[@@bs.module "fs"]
     
-    let readFileF: string -> string -> (_, string) F.future = F.encaseN2 readFile
+let readFileF: string -> string -> (_, string) F.future = F.encaseN2 readFile
 
-    let () = 
-      readFileF "utf-8" "package.json"
-      |> Future.fork Js.log Js.log
-
-Prints package.json
+let () = 
+  readFileF "utf-8" "package.json"
+  |> Future.fork Js.log Js.log
+```
